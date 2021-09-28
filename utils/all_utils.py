@@ -23,7 +23,7 @@ def save_model(model, filename):
   filePath = os.path.join(model_dir, filename) # model/filename
   joblib.dump(model, filePath)
 
-def save_plot(df, file_name, model):
+def save_plot(df, file_name, model_):
   def _create_base_plot(df):
     df.plot(kind="scatter", x="x1", y="x2", c="y", s=100, cmap="winter")
     plt.axhline(y=0, color="black", linestyle="--", linewidth=1)
@@ -52,3 +52,13 @@ def save_plot(df, file_name, model):
     plt.ylim(xx2.min(), xx2.max())
 
     plt.plot()
+
+  X, y = prepare_data(df)
+
+  _create_base_plot(df)
+  _plot_decision_regions(X, y, model_)
+
+  plot_dir = "plots"
+  os.makedirs(plot_dir, exist_ok=True) # ONLY CREATE IF MODEL_DIR DOESN"T EXISTS
+  plotPath = os.path.join(plot_dir, file_name) # model/filename
+  plt.savefig(plotPath)
