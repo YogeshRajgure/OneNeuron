@@ -12,6 +12,7 @@ AND = {
 
 df = pd.DataFrame(AND)
 
+####################################
 
 X,y = prepare_data(df)
 
