@@ -1,7 +1,17 @@
 import pandas as pd
+import logging
+import os
 
 from utils.model import Perceptron
 from utils.all_utils import prepare_data, save_model, save_plot
+
+
+logging_str = "[%(asctime)s: %(levelname)s: %(module)s] %(message)s"
+log_dir = "logs"
+
+os.makedirs(log_dir, exist_ok=True)
+logging.basicConfig(filename= os.path.join(log_dir, "running_logs.log"), level=logging.INFO, format=logging_str, filemode="a")
+
 
 def main(data, eta, epochs, filename):
 
@@ -10,6 +20,7 @@ def main(data, eta, epochs, filename):
     ####################################
 
     X,y = prepare_data(df)
+    logging.info(df)
 
     model = Perceptron(eta=eta, epochs=epochs)
     model.fit(X, y)
@@ -33,6 +44,11 @@ if __name__ == '__main__': #<< entry point
     ETA = 0.3 # 0 and 1
     EPOCHS = 10
 
-    main(data=AND, eta=ETA, epochs=EPOCHS, filename="and")
-
+    try:
+        logging.info(">>>>>>>>>>>>>>>> Starting training >>>>>>>>>>>>>>>>")
+        main(data=AND, eta=ETA, epochs=EPOCHS, filename="and")
+        logging.info("<<<<<<<<<<<<<<<< training done successfully <<<<<<<<<<<<\n\n\n\n")
+    except Exception as e:
+        logging.exception(e)
+        raise e
 
